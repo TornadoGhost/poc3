@@ -35,17 +35,7 @@ function formatResponse(text) {
   });
 }
 
-async function checkGeminiAvailable() {
-  try {
-    const res = await fetch('/api/chat');
-    const data = await res.json();
-    return data.hasKey === true;
-  } catch {
-    return false;
-  }
-}
-
-async function askGemini(message, history, context) {
+async function askClaude(message, history, context) {
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
@@ -66,7 +56,7 @@ export default function AIChat({ dashboardData, dateFrom, dateTo, activeCountry 
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [showPrompts, setShowPrompts] = useState(true);
-  const [useGemini, setUseGemini] = useState(process.env.NEXT_PUBLIC_HAS_GEMINI === 'true');
+  const [useClaude, setUseClaude] = useState(process.env.NEXT_PUBLIC_HAS_CLAUDE !== 'false');
   const messagesEnd = useRef(null);
 
   useEffect(() => {
@@ -92,18 +82,13 @@ export default function AIChat({ dashboardData, dateFrom, dateTo, activeCountry 
 
     let responseText;
 
-    if (useGemini) {
-      const result = await askGemini(text, history, context);
+    if (useClaude) {
+      const result = await askClaude(text, history, context);
       if (result.type === 'ok') {
         responseText = result.text;
       } else {
         const detail = result.detail || 'Unknown error';
-        try {
-          const parsed = JSON.parse(detail);
-          responseText = `⚠ Gemini API Error: ${parsed.error?.message || detail}`;
-        } catch {
-          responseText = `⚠ Gemini API Error: ${detail}`;
-        }
+        responseText = `⚠ Claude API Error: ${detail}`;
       }
     } else {
       await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
@@ -152,7 +137,7 @@ export default function AIChat({ dashboardData, dateFrom, dateTo, activeCountry 
               <div>
                 <h3 className="text-sm font-semibold text-slate-900">AI Insights Assistant</h3>
                 <p className="text-xs text-slate-500">
-                  {useGemini ? 'Powered by Gemini AI' : 'Powered by Social Pulse AI'}
+                  {useClaude ? 'Powered by Claude AI' : 'Powered by Social Pulse AI'}
                 </p>
               </div>
             </div>
