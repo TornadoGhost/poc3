@@ -204,7 +204,8 @@ CURRENTLY DISPLAYED ON DASHBOARD:
     prompt += `Region filter: ${activeCountry}\n`;
     if (stats) {
       prompt += `Displayed KPIs: Mentions=${stats.totalMentions}, Reach=${stats.totalReach}, Likes=${stats.totalLikes}, Retweets=${stats.totalRetweets}, EngRate=${stats.engagementRate}%, Authors=${stats.uniqueAuthors}\n`;
-      prompt += `Sentiment: Pos ${stats.positivePct}%, Neu ${stats.neutralPct}%, Neg ${stats.negativePct}%, Score=${stats.sentimentScore}/100\n`;
+      prompt += `Sentiment: Pos ${stats.positivePct}% (${stats.positiveCount} mentions), Neu ${stats.neutralPct}% (${stats.neutralCount} mentions), Neg ${stats.negativePct}% (${stats.negativeCount} mentions), Score=${stats.sentimentScore}/100\n`;
+      prompt += `IMPORTANT: When answering about sentiment, use EXACTLY these pre-calculated numbers. Do NOT try to count tweets yourself.\n`;
     }
   } else {
     prompt += `No filter applied.\n`;

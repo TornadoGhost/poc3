@@ -195,7 +195,7 @@ function computeFiltered(tweets, country, dateFrom, dateTo) {
 
   return {
     stats: { totalMentions, totalReach: totalViews, totalLikes, totalRetweets, engagementRate, uniqueAuthors,
-      postsPerMonth, topMarketName, positivePct, neutralPct, negativePct, sentimentScore,
+      postsPerMonth, topMarketName, positivePct, neutralPct, negativePct, positiveCount: sentTotals.Positive, neutralCount: sentTotals.Neutral, negativeCount: sentTotals.Negative, sentimentScore,
       totalTopics, hottestTheme, avgEngPerTopic, trends },
     mentionsOverTime, shareOfVoice, sentimentData, sentimentOverTime, topAuthors, trendingTopics, wordCloud, heatmapData, rawTweets: filtered,
   };
