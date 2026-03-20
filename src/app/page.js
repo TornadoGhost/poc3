@@ -208,12 +208,10 @@ export default function Home() {
     const dates = tweetsWithSentiment.map(t => t.date_published.substring(0, 10)).sort();
     return [dates[0], dates[dates.length - 1]];
   }, []);
-  const [datePreset, setDatePreset] = useState('7D');
+  const [datePreset, setDatePreset] = useState('ALL');
   const [dateFrom, setDateFrom] = useState(() => {
     const dates = tweetsWithSentiment.map(t => t.date_published.substring(0, 10)).sort();
-    const max = new Date(dates[dates.length - 1]);
-    max.setDate(max.getDate() - 7);
-    return max.toISOString().substring(0, 10);
+    return dates[0];
   });
   const [dateTo, setDateTo] = useState(() => {
     const dates = tweetsWithSentiment.map(t => t.date_published.substring(0, 10)).sort();

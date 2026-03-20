@@ -73,14 +73,18 @@ export default function EngagementHeatmap({ data }) {
         {/* Month labels */}
         <div className="flex mb-1">
           <div className="w-10 shrink-0" />
-          <div className="flex-1 flex">
-            {displayMonths.map((m, i) => (
-              <div key={m} className="flex-1 text-center">
-                {i % Math.max(1, Math.floor(displayMonths.length / 8)) === 0 ? (
-                  <span className="text-[9px] text-slate-600">{m.substring(2)}</span>
-                ) : null}
-              </div>
-            ))}
+          <div className="flex-1 flex gap-[3px]">
+            {displayMonths.map((m, i) => {
+              const step = Math.max(1, Math.floor(displayMonths.length / 8));
+              const show = i % step === 0;
+              return (
+                <div key={m} className="flex-1" style={{ minWidth: '12px', maxWidth: '28px' }}>
+                  {show ? (
+                    <span className="text-[9px] text-slate-600">{m.substring(2)}</span>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         </div>
 
