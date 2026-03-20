@@ -190,7 +190,7 @@ export default function AIChat({ dashboardData, dateFrom, dateTo, activeCountry 
             <div ref={messagesEnd} />
           </div>
 
-          {showPrompts && (
+          {messages.length === 0 && (
             <div className="px-4 pb-2 space-y-1.5">
               {aiPrompts
                 .filter(p => !messages.some(m => m.role === 'user' && m.text === p.text))

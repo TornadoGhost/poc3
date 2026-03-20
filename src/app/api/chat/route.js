@@ -150,6 +150,7 @@ function buildSystemPrompt(context) {
 
 RULES:
 - Answer ONLY based on the data provided below. Do not make up numbers.
+- For KPIs and sentiment stats, ALWAYS use the exact pre-calculated values from "CURRENTLY DISPLAYED ON DASHBOARD" section. NEVER count or recalculate these yourself from raw data.
 - Keep responses concise (3-6 sentences). Use bullet points for lists.
 - Format numbers in bold with **. Use % where relevant.
 - Be professional, business-oriented, and insightful.
@@ -204,8 +205,7 @@ CURRENTLY DISPLAYED ON DASHBOARD:
     prompt += `Region filter: ${activeCountry}\n`;
     if (stats) {
       prompt += `Displayed KPIs: Mentions=${stats.totalMentions}, Reach=${stats.totalReach}, Likes=${stats.totalLikes}, Retweets=${stats.totalRetweets}, EngRate=${stats.engagementRate}%, Authors=${stats.uniqueAuthors}\n`;
-      prompt += `Sentiment: Pos ${stats.positivePct}% (${stats.positiveCount} mentions), Neu ${stats.neutralPct}% (${stats.neutralCount} mentions), Neg ${stats.negativePct}% (${stats.negativeCount} mentions), Score=${stats.sentimentScore}/100\n`;
-      prompt += `IMPORTANT: When answering about sentiment, use EXACTLY these pre-calculated numbers. Do NOT try to count tweets yourself.\n`;
+      prompt += `EXACT Sentiment (use ONLY these numbers, never count yourself): Positive=${stats.positiveCount} mentions (${stats.positivePct}%), Neutral=${stats.neutralCount} mentions (${stats.neutralPct}%), Negative=${stats.negativeCount} mentions (${stats.negativePct}%), Score=${stats.sentimentScore}/100\n`;
     }
   } else {
     prompt += `No filter applied.\n`;
