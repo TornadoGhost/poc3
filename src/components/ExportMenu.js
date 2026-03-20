@@ -16,89 +16,90 @@ const SECTIONS = [
 ];
 
 function buildCSV(selected, data) {
+  const S = ';';
   const blocks = [];
 
   if (selected.kpis) {
     blocks.push('=== KPI SUMMARY ===');
-    blocks.push('Metric,Value');
-    blocks.push(`Total Mentions,${data.stats.totalMentions}`);
-    blocks.push(`Total Reach,${data.stats.totalReach}`);
-    blocks.push(`Engagement Rate,${data.stats.engagementRate}%`);
-    blocks.push(`Active Authors,${data.stats.uniqueAuthors}`);
-    blocks.push(`Avg Posts/Month,${data.stats.postsPerMonth}`);
+    blocks.push(`Metric${S}Value`);
+    blocks.push(`Total Mentions${S}${data.stats.totalMentions}`);
+    blocks.push(`Total Reach${S}${data.stats.totalReach}`);
+    blocks.push(`Engagement Rate${S}${data.stats.engagementRate}%`);
+    blocks.push(`Active Authors${S}${data.stats.uniqueAuthors}`);
+    blocks.push(`Avg Posts/Month${S}${data.stats.postsPerMonth}`);
     blocks.push('');
   }
 
   if (selected.mentions) {
     blocks.push('=== MENTIONS OVER TIME ===');
-    blocks.push('Month,UAE,KSA,Qatar,Total');
+    blocks.push(`Month${S}UAE${S}KSA${S}Qatar${S}Total`);
     data.mentionsOverTime.forEach(m => {
-      blocks.push(`${m.date},${m.UAE},${m.KSA},${m.Qatar},${m.UAE + m.KSA + m.Qatar}`);
+      blocks.push(`${m.date}${S}${m.UAE}${S}${m.KSA}${S}${m.Qatar}${S}${m.UAE + m.KSA + m.Qatar}`);
     });
     blocks.push('');
   }
 
   if (selected.voice) {
     blocks.push('=== SHARE OF VOICE ===');
-    blocks.push('Country,Mentions,Percentage');
+    blocks.push(`Country${S}Mentions${S}Percentage`);
     const total = data.shareOfVoice.reduce((s, d) => s + d.value, 0);
     data.shareOfVoice.forEach(d => {
-      blocks.push(`${d.name},${d.value},${total > 0 ? (d.value / total * 100).toFixed(1) : 0}%`);
+      blocks.push(`${d.name}${S}${d.value}${S}${total > 0 ? (d.value / total * 100).toFixed(1) : 0}%`);
     });
     blocks.push('');
   }
 
   if (selected.sentiment) {
     blocks.push('=== SENTIMENT ANALYSIS ===');
-    blocks.push('Sentiment,Count,Percentage');
+    blocks.push(`Sentiment${S}Count${S}Percentage`);
     const total = data.sentimentData.reduce((s, d) => s + d.value, 0);
     data.sentimentData.forEach(d => {
-      blocks.push(`${d.name},${d.value},${total > 0 ? (d.value / total * 100).toFixed(1) : 0}%`);
+      blocks.push(`${d.name}${S}${d.value}${S}${total > 0 ? (d.value / total * 100).toFixed(1) : 0}%`);
     });
     blocks.push('');
   }
 
   if (selected.sentimentTime) {
     blocks.push('=== SENTIMENT TIMELINE ===');
-    blocks.push('Month,Positive,Neutral,Negative');
+    blocks.push(`Month${S}Positive${S}Neutral${S}Negative`);
     data.sentimentOverTime.forEach(m => {
-      blocks.push(`${m.date},${m.Positive},${m.Neutral},${m.Negative}`);
+      blocks.push(`${m.date}${S}${m.Positive}${S}${m.Neutral}${S}${m.Negative}`);
     });
     blocks.push('');
   }
 
   if (selected.topics) {
     blocks.push('=== TRENDING TOPICS ===');
-    blocks.push('Rank,Topic,Volume,Engagement,Momentum,Trend');
+    blocks.push(`Rank${S}Topic${S}Volume${S}Engagement${S}Momentum${S}Trend`);
     data.trendingTopics.forEach((t, i) => {
-      blocks.push(`${i + 1},"${t.topic}",${t.volume},${t.engagement},${t.momentum},${t.trend}`);
+      blocks.push(`${i + 1}${S}${t.topic}${S}${t.volume}${S}${t.engagement}${S}${t.momentum}${S}${t.trend}`);
     });
     blocks.push('');
   }
 
   if (selected.authors) {
     blocks.push('=== TOP INFLUENCERS ===');
-    blocks.push('Rank,Author,Posts,Likes,Retweets,Views');
+    blocks.push(`Rank${S}Author${S}Posts${S}Likes${S}Retweets${S}Views`);
     data.topAuthors.forEach((a, i) => {
-      blocks.push(`${i + 1},@${a.author},${a.tweets},${a.likes},${a.retweets},${a.views}`);
+      blocks.push(`${i + 1}${S}@${a.author}${S}${a.tweets}${S}${a.likes}${S}${a.retweets}${S}${a.views}`);
     });
     blocks.push('');
   }
 
   if (selected.keywords) {
     blocks.push('=== KEYWORD CLOUD ===');
-    blocks.push('Keyword,Frequency');
+    blocks.push(`Keyword${S}Frequency`);
     data.wordCloud.forEach(w => {
-      blocks.push(`"${w.text}",${w.value}`);
+      blocks.push(`${w.text}${S}${w.value}`);
     });
     blocks.push('');
   }
 
   if (selected.raw) {
     blocks.push('=== RAW POSTS ===');
-    blocks.push('Date,Author,Country,Sentiment,Likes,Retweets,Replies,Views,Text');
+    blocks.push(`Date${S}Author${S}Country${S}Sentiment${S}Likes${S}Retweets${S}Replies${S}Views${S}Text`);
     data.rawTweets.forEach(t => {
-      blocks.push(`${t.date_published},${t.author},${t.country},${t.sentiment},${t.likes_count},${t.retweets_count},${t.replies_count},${t.views_count},"${(t.post_text || '').replace(/"/g, '""')}"`);
+      blocks.push(`${t.date_published}${S}${t.author}${S}${t.country}${S}${t.sentiment}${S}${t.likes_count}${S}${t.retweets_count}${S}${t.replies_count}${S}${t.views_count}${S}${(t.post_text || '').replace(/[\r\n]+/g, ' ')}`);
     });
     blocks.push('');
   }
@@ -139,7 +140,7 @@ export default function ExportMenu({ data, activeCountry, dateFrom, dateTo }) {
     if (!hasAny) return;
 
     const csv = buildCSV(selected, data);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
