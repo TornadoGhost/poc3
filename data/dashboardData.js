@@ -257,6 +257,17 @@ const topSpikeMonth = monthlyVolumes[0];
 export const aiPrompts = [
   {
     id: 1,
+    text: "What's the overall sentiment split?",
+    response: (() => {
+      const total = sentByCountry.UAE.Positive + sentByCountry.UAE.Neutral + sentByCountry.UAE.Negative + sentByCountry.KSA.Positive + sentByCountry.KSA.Neutral + sentByCountry.KSA.Negative + sentByCountry.Qatar.Positive + sentByCountry.Qatar.Neutral + sentByCountry.Qatar.Negative;
+      const pos = sentByCountry.UAE.Positive + sentByCountry.KSA.Positive + sentByCountry.Qatar.Positive;
+      const neu = sentByCountry.UAE.Neutral + sentByCountry.KSA.Neutral + sentByCountry.Qatar.Neutral;
+      const neg = sentByCountry.UAE.Negative + sentByCountry.KSA.Negative + sentByCountry.Qatar.Negative;
+      return `Here's the overall sentiment distribution across all regions:\n\n• 🟢 **Positive:** ${Math.round(pos/total*100)}% (${pos} mentions)\n• ⚪ **Neutral:** ${Math.round(neu/total*100)}% (${neu} mentions)\n• 🔴 **Negative:** ${Math.round(neg/total*100)}% (${neg} mentions)\n\n**Sentiment Score:** ${Math.round(((pos - neg) / total + 1) / 2 * 100)}/100\n\n**Business Insight:** The overwhelmingly positive-to-neutral tone indicates strong brand health across Gulf markets, with negative mentions at just ${Math.round(neg/total*100)}% — well within safe thresholds.`;
+    })(),
+  },
+  {
+    id: 2,
     text: `Why was there a spike in ${topSpikeMonth ? new Date(topSpikeMonth.date + '-01').toLocaleString('en', { month: 'long', year: 'numeric' }) : 'September 2021'}?`,
     response: (() => {
       const m = topSpikeMonth ? topSpikeMonth.date : '2021-09';
@@ -266,21 +277,6 @@ export const aiPrompts = [
       const authors = getTopAuthorsForMonth(m);
       const multiplier = avgMonthly > 0 ? (stats.posts / avgMonthly).toFixed(1) : 'N/A';
       return `Great question! ${label} saw a significant spike of **${stats.posts} mentions** — the highest single month in our dataset.\n\n**Key drivers:**\n• **Themes:** ${themes.join(', ')}\n• **Top voices:** ${authors.join(', ')}\n\n**Business Insight:** This spike represents a **${multiplier}x increase** over the monthly average (${Math.round(avgMonthly)} posts). Monitoring such anomalies in real-time allows your communications team to capitalize on trending conversations within the first 24 hours.`;
-    })(),
-  },
-  {
-    id: 2,
-    text: (() => {
-      const secondMonth = monthlyVolumes[1] ? monthlyVolumes[1].date : '2021-10';
-      return `What drove engagement in ${new Date(secondMonth + '-01').toLocaleString('en', { month: 'long', year: 'numeric' })}?`;
-    })(),
-    response: (() => {
-      const m = monthlyVolumes[1] ? monthlyVolumes[1].date : '2021-10';
-      const label = new Date(m + '-01').toLocaleString('en', { month: 'long', year: 'numeric' });
-      const stats = getMonthStats(m);
-      const dominant = getDominantTheme(m);
-      const authors = getTopAuthorsForMonth(m);
-      return `${label} was a high-engagement month with **${stats.posts} posts** generating **${stats.likes.toLocaleString()} likes** and **${stats.retweets.toLocaleString()} retweets**.\n\n**Key drivers:**\n• **Dominant theme:** ${dominant.theme} (${dominant.count} of ${dominant.total} posts)\n• **Top voices:** ${authors.join(', ')}\n• The engagement-per-post ratio was significantly above average\n\n**Business Insight:** Topics like "${dominant.theme}" consistently drive high engagement in the Gulf region. This signals a strategic opportunity for brands to align messaging with these themes to maximize organic reach and stakeholder resonance.`;
     })(),
   },
   {

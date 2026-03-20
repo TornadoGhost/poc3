@@ -331,7 +331,7 @@ export default function Home() {
             </>)}
           </div>
 
-          {/* Mentions: Mentions Over Time + Share of Voice + Heatmap */}
+          {/* Mentions: Mentions Over Time + Share of Voice */}
           {showSection('mentions') && (<>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="animate-fade-in animate-fade-in-delay-3">
@@ -345,17 +345,24 @@ export default function Home() {
                 </Card>
               </div>
             </div>
-            <div className="mb-6 animate-fade-in animate-fade-in-delay-5">
-              <Card title="Activity Heatmap" businessValue="Reveals when your audience is most active — optimize posting schedules to maximize reach and engagement.">
-                <EngagementHeatmap data={data.heatmapData} />
-              </Card>
-            </div>
           </>)}
 
-          {/* Sentiment: Donut + Timeline */}
-          {showSection('sentiment') && (
+          {/* Sentiment: Heatmap + Word Cloud, Donut + Timeline */}
+          {showSection('sentiment') && (<>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="animate-fade-in animate-fade-in-delay-4">
+                <Card title="Activity Heatmap" businessValue="Reveals when your audience is most active — optimize posting schedules to maximize reach and engagement.">
+                  <EngagementHeatmap data={data.heatmapData} />
+                </Card>
+              </div>
+              <div className="animate-fade-in animate-fade-in-delay-4">
+                <Card title="Keyword Cloud" businessValue="Visual map of the most discussed terms — instantly reveals what the audience cares about and where to focus messaging.">
+                  <WordCloud data={data.wordCloud} />
+                </Card>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="animate-fade-in animate-fade-in-delay-5">
                 <Card title="AI Sentiment Analysis" businessValue="Enables leadership to instantly gauge brand perception and proactively allocate PR resources to mitigate potential crises.">
                   <SentimentDonut data={data.sentimentData} />
                 </Card>
@@ -366,28 +373,23 @@ export default function Home() {
                 </Card>
               </div>
             </div>
-          )}
+          </>)}
 
-          {/* Trends: Topics + Authors + Word Cloud */}
-          {showSection('trends') && (<>
+          {/* Trends: Topics + Authors */}
+          {showSection('trends') && (
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="animate-fade-in animate-fade-in-delay-5">
                 <Card title="Trending Topics — What's Hot" businessValue="Identifies which policy areas and social topics are gaining traction — enables proactive thought-leadership positioning.">
                   <TrendingTopics data={data.trendingTopics} />
                 </Card>
               </div>
-              <div className="animate-fade-in animate-fade-in-delay-6">
+              <div className="animate-fade-in animate-fade-in-delay-5">
                 <Card title="Top Influencers" businessValue="Identify key voices shaping the narrative to inform influencer partnership and outreach strategies.">
                   <TopAuthors data={data.topAuthors} />
                 </Card>
               </div>
             </div>
-            <div className="mb-6 animate-fade-in animate-fade-in-delay-6">
-              <Card title="Keyword Cloud" businessValue="Visual map of the most discussed terms — instantly reveals what the audience cares about and where to focus messaging.">
-                <WordCloud data={data.wordCloud} />
-              </Card>
-            </div>
-          </>)}
+          )}
         </main>
       </div>
 
